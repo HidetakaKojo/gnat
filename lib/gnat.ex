@@ -194,6 +194,7 @@ defmodule Gnat do
   def handle_call({:sub, receiver, topic, opts}, _from, %{next_sid: sid}=state) do
     sub = Command.build(:sub, topic, sid, opts)
     :ok = socket_write(state, sub)
+    Logger.debug("sent sub request, topic:#{topic}")
     next_state = add_subscription_to_state(state, sid, receiver) |> Map.put(:next_sid, sid + 1)
     {:reply, {:ok, sid}, next_state}
   end
